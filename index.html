@@ -33,7 +33,8 @@
       // -----------------------------
       // Constants
       // -----------------------------
-      const STORAGE_KEY = "releaseTimelineState.v6";
+      // ✅ bumped to v7 so old localStorage doesn't override your new defaults
+      const STORAGE_KEY = "releaseTimelineState.v7";
       const DAY_MS = 24 * 60 * 60 * 1000;
       const MONTHS = [
         "January",
@@ -254,7 +255,7 @@
       }) {
         const weeks = useMemo(
           () => getMonthWeeks(year, month, 5),
-          [year, month],
+          [year, month]
         );
 
         return (
@@ -289,9 +290,10 @@
                     <div
                       key={`${iso}-${idx}`}
                       data-date={iso}
-                      className={`relative min-h-[60px] sm:min-h-[100px] lg:min-h-[150px] p-1 sm:p-2 bg-white ${!inMonth ? "opacity-50" : ""} hover:bg-blue-50/40 transition-colors overflow-hidden`}
+                      className={`relative min-h-[60px] sm:min-h-[100px] lg:min-h-[150px] p-1 sm:p-2 bg-white ${
+                        !inMonth ? "opacity-50" : ""
+                      } hover:bg-blue-50/40 transition-colors overflow-hidden`}
                     >
-                      {/* Strong today highlight */}
                       {isToday && (
                         <div className="absolute inset-0 bg-blue-50/40 pointer-events-none z-0" />
                       )}
@@ -299,7 +301,6 @@
                         <div className="absolute inset-0 rounded-md ring-4 ring-blue-600 pointer-events-none z-50" />
                       )}
 
-                      {/* Ranges (below events) */}
                       {rangesInCell.map((r) => {
                         const s = fromISO(r.startISO);
                         const endEx = addDays(s, r.length);
@@ -311,7 +312,9 @@
                         return (
                           <div
                             key={r.id}
-                            className={`absolute inset-0 rounded-md cursor-move select-none z-10 ${faded ? "opacity-40" : ""}`}
+                            className={`absolute inset-0 rounded-md cursor-move select-none z-10 ${
+                              faded ? "opacity-40" : ""
+                            }`}
                             onPointerDown={(e) => {
                               e.preventDefault();
                               if (isStart) onRangeResizeStart(r.id);
@@ -344,21 +347,23 @@
                         );
                       })}
 
-                      {/* Day number */}
                       <div
-                        className={`absolute right-1 sm:right-2 bottom-1 sm:bottom-2 text-[9px] sm:text-[10px] z-30 ${cellPast ? "text-gray-400" : "text-gray-500"}`}
+                        className={`absolute right-1 sm:right-2 bottom-1 sm:bottom-2 text-[9px] sm:text-[10px] z-30 ${
+                          cellPast ? "text-gray-400" : "text-gray-500"
+                        }`}
                       >
                         {date.getDate()}
                       </div>
 
-                      {/* Events (always on top). No horizontal scrollbars; wrap long text. */}
                       <div className="relative space-y-0.5 sm:space-y-1 pt-4 sm:pt-8 z-40 max-h-[40px] sm:max-h-[60px] lg:max-h-[110px] overflow-y-auto overflow-x-hidden pr-1">
                         {dayEvents.map((evt) => {
                           const evtPast = fromISO(evt.dateISO) < today;
                           return (
                             <div
                               key={evt.id}
-                              className={`block w-full max-w-full rounded-md text-[10px] sm:text-xs cursor-grab active:cursor-grabbing shadow select-none bg-white/85 backdrop-blur px-1 sm:px-2 py-0.5 sm:py-1 ${evtPast ? "opacity-45" : ""}`}
+                              className={`block w-full max-w-full rounded-md text-[10px] sm:text-xs cursor-grab active:cursor-grabbing shadow select-none bg-white/85 backdrop-blur px-1 sm:px-2 py-0.5 sm:py-1 ${
+                                evtPast ? "opacity-45" : ""
+                              }`}
                               style={{ border: `1px solid ${evt.color}` }}
                               onPointerDown={(e) => {
                                 e.preventDefault();
@@ -410,8 +415,8 @@
                           prev.map((x) =>
                             x.id === evt.id
                               ? { ...x, label: e.target.value }
-                              : x,
-                          ),
+                              : x
+                          )
                         )
                       }
                     />
@@ -427,8 +432,8 @@
                           prev.map((x) =>
                             x.id === evt.id
                               ? { ...x, dateISO: e.target.value }
-                              : x,
-                          ),
+                              : x
+                          )
                         )
                       }
                     />
@@ -445,8 +450,8 @@
                             prev.map((x) =>
                               x.id === evt.id
                                 ? { ...x, color: e.target.value }
-                                : x,
-                            ),
+                                : x
+                            )
                           )
                         }
                       />
@@ -491,8 +496,8 @@
                       onChange={(e) =>
                         setRanges((prev) =>
                           prev.map((x) =>
-                            x.id === r.id ? { ...x, label: e.target.value } : x,
-                          ),
+                            x.id === r.id ? { ...x, label: e.target.value } : x
+                          )
                         )
                       }
                     />
@@ -508,8 +513,8 @@
                           prev.map((x) =>
                             x.id === r.id
                               ? { ...x, startISO: e.target.value }
-                              : x,
-                          ),
+                              : x
+                          )
                         )
                       }
                     />
@@ -529,11 +534,11 @@
                                   ...x,
                                   length: Math.max(
                                     1,
-                                    Number(e.target.value || 1),
+                                    Number(e.target.value || 1)
                                   ),
                                 }
-                              : x,
-                          ),
+                              : x
+                          )
                         )
                       }
                     />
@@ -548,8 +553,8 @@
                         onChange={(e) =>
                           setRanges((prev) =>
                             prev.map((x) =>
-                              x.id === r.id ? { ...x, color: e.target.value } : x,
-                            ),
+                              x.id === r.id ? { ...x, color: e.target.value } : x
+                            )
                           )
                         }
                       />
@@ -575,90 +580,59 @@
         const now = new Date();
         const today = startOfDay(now);
 
-        const defaultWindow = {
-          startYear: now.getFullYear(),
-          startMonth: now.getMonth(),
-        };
+        // ✅ seeded defaults from your JSON
+        const defaultWindow = { startYear: 2026, startMonth: 2 };
         const defaults = useMemo(
           () => ({
-            title: "Release Timeline",
-            window: defaultWindow,
+            title: "Owlet OnCall",
+            window: { startYear: 2026, startMonth: 2 },
             events: [
-              {
-                id: "e1",
-                label: "Alpha",
-                color: "#d50000",
-                dateISO: toISO(addDays(now, 7)),
-              },
-              {
-                id: "e2",
-                label: "Friends & Family",
-                color: "#33b679",
-                dateISO: toISO(addDays(now, 21)),
-              },
-              {
-                id: "e3",
-                label: "App Store Submit",
-                color: "#1a73e8",
-                dateISO: toISO(addDays(now, 35)),
-              },
+              { id: "e1", label: "Testflight Build", color: "#000000", dateISO: "2026-03-18" },
+              { id: "e2", label: "App store Release", color: "#000000", dateISO: "2026-04-01" },
+              { id: "e6gwhbx", label: "Data Agreement", color: "#000000", dateISO: "2026-02-26" },
+              { id: "e7paas2", label: "100% Rollout", color: "#000000", dateISO: "2026-05-31" }
             ],
             ranges: [
-              {
-                id: "r1",
-                label: "Staged Rollout",
-                color: "#f6bf26",
-                startISO: toISO(addDays(now, 28)),
-                length: 7,
-              },
-              {
-                id: "r2",
-                label: "Code Freeze",
-                color: "#8e24aa",
-                startISO: toISO(addDays(now, 18)),
-                length: 5,
-              },
-            ],
+              { id: "r1", label: "Owlet Dev Sprint", color: "#2a42aa", startISO: "2026-03-04", length: 16 },
+              { id: "r2", label: "Internal Friends and Family", color: "#0071a4", startISO: "2026-03-20", length: 13 },
+              { id: "r8fxdyx", label: "External Friends and Family", color: "#007a5a", startISO: "2026-04-02", length: 5 },
+              { id: "rn9yoiu", label: "1% Rollout", color: "#c01343", startISO: "2026-04-07", length: 7 },
+              { id: "r4pp42s", label: "10% Rollout", color: "#50740e", startISO: "2026-04-21", length: 14 },
+              { id: "r1relp8", label: "50% Rollout", color: "#454447", startISO: "2026-05-05", length: 14 },
+              { id: "re2ea88", label: "5% Rollout", color: "#034526", startISO: "2026-04-14", length: 7 },
+              { id: "rrnk5d4", label: "75% Rollout", color: "#33b679", startISO: "2026-05-19", length: 12 }
+            ]
           }),
-          [],
+          []
         );
 
         const persisted = loadState(defaults);
 
         const [title, setTitle] = useState(persisted.title ?? defaults.title);
         const [windowStartYear, setWindowStartYear] = useState(
-          persisted.window?.startYear ?? defaultWindow.startYear,
+          persisted.window?.startYear ?? defaults.window.startYear
         );
         const [windowStartMonth, setWindowStartMonth] = useState(
-          persisted.window?.startMonth ?? defaultWindow.startMonth,
+          persisted.window?.startMonth ?? defaults.window.startMonth
         );
-        const [events, setEvents] = useState(
-          persisted.events ?? defaults.events,
-        );
-        const [ranges, setRanges] = useState(
-          persisted.ranges ?? defaults.ranges,
-        );
+        const [events, setEvents] = useState(persisted.events ?? defaults.events);
+        const [ranges, setRanges] = useState(persisted.ranges ?? defaults.ranges);
 
         useAutoSave({
           title,
           window: { startYear: windowStartYear, startMonth: windowStartMonth },
           events,
-          ranges,
+          ranges
         });
 
         const visibleMonths = useMemo(
-          () =>
-            [0, 1, 2].map((i) =>
-              addMonths(windowStartYear, windowStartMonth, i),
-            ),
-          [windowStartYear, windowStartMonth],
+          () => [0, 1, 2].map((i) => addMonths(windowStartYear, windowStartMonth, i)),
+          [windowStartYear, windowStartMonth]
         );
 
-        // Drag state
         const dragState = useRef(null);
         const [hoverISO, setHoverISO] = useState(null);
 
-        // Move target detection
         useEffect(() => {
           function onMove(ev) {
             if (!dragState.current) return;
@@ -677,27 +651,19 @@
               return;
             }
 
-            // Clamp to visible 3-month window
-            const windowStartDate = startOfMonth(
-              windowStartYear,
-              windowStartMonth,
-            );
+            const windowStartDate = startOfMonth(windowStartYear, windowStartMonth);
             const last = addMonths(windowStartYear, windowStartMonth, 2);
             const windowEndDate = endOfMonth(last.y, last.m);
             const clamp = (d) =>
-              d < windowStartDate
-                ? new Date(windowStartDate)
-                : d > windowEndDate
-                  ? new Date(windowEndDate)
-                  : d;
+              d < windowStartDate ? new Date(windowStartDate)
+              : d > windowEndDate ? new Date(windowEndDate)
+              : d;
 
             if (state.kind === "event") {
               setEvents((prev) =>
                 prev.map((e) =>
-                  e.id === state.id
-                    ? { ...e, dateISO: toISO(clamp(fromISO(iso))) }
-                    : e,
-                ),
+                  e.id === state.id ? { ...e, dateISO: toISO(clamp(fromISO(iso))) } : e
+                )
               );
             }
 
@@ -707,11 +673,10 @@
                   if (r.id !== state.id) return r;
                   let newStart = addDays(fromISO(iso), -state.offset);
                   const latestStart = addDays(windowEndDate, -(r.length - 1));
-                  if (newStart < windowStartDate)
-                    newStart = new Date(windowStartDate);
+                  if (newStart < windowStartDate) newStart = new Date(windowStartDate);
                   if (newStart > latestStart) newStart = latestStart;
                   return { ...r, startISO: toISO(newStart) };
-                }),
+                })
               );
             }
 
@@ -722,11 +687,10 @@
                   let newStart = fromISO(iso);
                   const endEx = addDays(fromISO(r.startISO), r.length);
                   if (newStart >= endEx) newStart = addDays(endEx, -1);
-                  if (newStart < windowStartDate)
-                    newStart = new Date(windowStartDate);
+                  if (newStart < windowStartDate) newStart = new Date(windowStartDate);
                   const newLen = Math.max(1, dayDiff(endEx, newStart));
                   return { ...r, startISO: toISO(newStart), length: newLen };
-                }),
+                })
               );
             }
 
@@ -741,7 +705,7 @@
                     newEndEx = addDays(windowEndDate, 1);
                   const newLen = Math.max(1, dayDiff(newEndEx, start));
                   return { ...r, length: newLen };
-                }),
+                })
               );
             }
 
@@ -757,7 +721,6 @@
           };
         }, [hoverISO, windowStartYear, windowStartMonth]);
 
-        // Drag starters
         function onEventDragStart(id, iso) {
           dragState.current = { kind: "event", id };
           setHoverISO(iso);
@@ -780,7 +743,6 @@
           setGlobalSelecting(false);
         }
 
-        // Header actions
         function pageMonths(delta) {
           const next = addMonths(windowStartYear, windowStartMonth, delta);
           setWindowStartYear(next.y);
@@ -799,7 +761,7 @@
           }
           const seen = new Set();
           return opts.filter((o) =>
-            seen.has(o.value) ? false : (seen.add(o.value), true),
+            seen.has(o.value) ? false : (seen.add(o.value), true)
           );
         }, [windowStartYear, windowStartMonth]);
 
@@ -810,16 +772,11 @@
         function onExport() {
           const data = {
             title,
-            window: {
-              startYear: windowStartYear,
-              startMonth: windowStartMonth,
-            },
+            window: { startYear: windowStartYear, startMonth: windowStartMonth },
             events,
-            ranges,
+            ranges
           };
-          const blob = new Blob([JSON.stringify(data, null, 2)], {
-            type: "application/json",
-          });
+          const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
           const url = URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
@@ -833,20 +790,15 @@
             try {
               const data = JSON.parse(e.target.result);
               if (typeof data.title === "string") setTitle(data.title);
-              if (data.window?.startYear != null)
-                setWindowStartYear(data.window.startYear);
-              if (data.window?.startMonth != null)
-                setWindowStartMonth(data.window.startMonth);
+              if (data.window?.startYear != null) setWindowStartYear(data.window.startYear);
+              if (data.window?.startMonth != null) setWindowStartMonth(data.window.startMonth);
               if (Array.isArray(data.events)) setEvents(data.events);
               if (Array.isArray(data.ranges)) setRanges(data.ranges);
               saveState({
                 title: data.title ?? title,
-                window: data.window ?? {
-                  startYear: windowStartYear,
-                  startMonth: windowStartMonth,
-                },
+                window: data.window ?? { startYear: windowStartYear, startMonth: windowStartMonth },
                 events: data.events ?? events,
-                ranges: data.ranges ?? ranges,
+                ranges: data.ranges ?? ranges
               });
             } catch {
               alert("Invalid JSON");
@@ -855,7 +807,6 @@
           reader.readAsText(file);
         }
 
-        // Add/remove
         const addEvent = () =>
           setEvents((prev) => [
             ...prev,
@@ -931,10 +882,7 @@
             </div>
 
             <div className="text-xs text-gray-500">
-              Autosaves locally. Use the month dropdown + arrows to page. Drag
-              events to move them. For ranges: drag the first day to adjust the
-              start, the last day to adjust the end, or any middle day to move
-              the whole range.
+              Autosaves locally. Use the month dropdown + arrows to page. Drag events to move them. For ranges: drag the first day to adjust the start, the last day to adjust the end, or any middle day to move the whole range.
             </div>
           </div>
         );
